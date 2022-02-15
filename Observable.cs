@@ -4,13 +4,13 @@ using System.Runtime.CompilerServices;
 namespace Snap.Data.Primitive
 {
     /// <summary>
-    /// 实现 <see cref="INotifyPropertyChanged"/> 接口
+    /// 简单的实现了 <see cref="INotifyPropertyChanged"/> 接口
     /// </summary>
     public class Observable : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
+        protected void Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = default!)
         {
             if (Equals(storage, value))
             {
