@@ -2,7 +2,7 @@
 
 namespace Snap.Data.Primitive
 {
-    public record Result<TResult, TValue>
+    public record Result<TResult, TValue> where TResult : notnull where TValue : notnull
     {
         public Result(TResult isOk, TValue value)
         {
@@ -18,14 +18,6 @@ namespace Snap.Data.Primitive
         {
             isOk = IsOk;
             value = Value;
-        }
-    }
-
-    public record Result<TValue>:Result<bool,TValue>
-    {
-        public Result(bool isOk, TValue okValue, TValue notOkValue) : base(isOk, isOk ? okValue : notOkValue)
-        {
-
         }
     }
 }
