@@ -9,8 +9,8 @@
     {
         public Result(TResult isOk, TValue value)
         {
-            IsOk = isOk;
-            Value = value;
+            this.IsOk = isOk;
+            this.Value = value;
         }
 
         public TResult IsOk { get; }
@@ -23,8 +23,8 @@
         /// <param name="value"></param>
         public void Deconstruct(out TResult isOk, out TValue value)
         {
-            isOk = IsOk;
-            value = Value;
+            isOk = this.IsOk;
+            value = this.Value;
         }
     }
 }

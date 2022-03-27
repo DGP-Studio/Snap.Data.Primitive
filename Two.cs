@@ -8,8 +8,8 @@
     {
         public Two(T first, T second)
         {
-            First = first;
-            Second = second;
+            this.First = first;
+            this.Second = second;
         }
 
         /// <summary>

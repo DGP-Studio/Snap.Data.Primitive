@@ -18,7 +18,7 @@ namespace Snap.Data.Primitive
             }
 
             storage = value;
-            OnPropertyChanged(propertyName);
+            this.OnPropertyChanged(propertyName);
         }
 
         protected void OnPropertyChanged(string propertyName)

@@ -4,13 +4,13 @@ namespace Snap.Data.Primitive
 {
     public class Indexed<TIndex, TListElement>
     {
-        public Indexed(TIndex index, IEnumerable<TListElement> list)
+        public Indexed(TIndex index, IList<TListElement> list)
         {
-            Index = index;
-            List = list;
+            this.Index = index;
+            this.List = list;
         }
 
         public TIndex Index { get; set; }
-        public IEnumerable<TListElement> List { get; set; }
+        public IList<TListElement> List { get; set; }
     }
 }

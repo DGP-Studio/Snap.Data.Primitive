@@ -16,16 +16,16 @@ namespace Snap.Data.Primitive
 
         public bool IsWorking
         {
-            get => isWorking;
+            get => this.isWorking;
 
-            set => Set(ref isWorking, value);
+            set => this.Set(ref this.isWorking, value);
         }
 
         public bool IsCompleted
         {
-            get => isCompleted;
+            get => this.isCompleted;
 
-            set => Set(ref isCompleted, value);
+            set => this.Set(ref this.isCompleted, value);
         }
 
         private struct WorkDisposable : IDisposable
@@ -38,8 +38,8 @@ namespace Snap.Data.Primitive
 
             public void Dispose()
             {
-                work.IsWorking = false;
-                work.IsCompleted = true;
+                this.work.IsWorking = false;
+                this.work.IsCompleted = true;
             }
         }
 
@@ -50,12 +50,12 @@ namespace Snap.Data.Primitive
 
         public IDisposable Watch()
         {
-            if (!isReusable && hasUsed)
+            if (!this.isReusable && this.hasUsed)
             {
                 throw new InvalidOperationException($"此 {nameof(WorkWatcher)} 不允许多次使用");
             }
-            hasUsed = true;
-            IsWorking = true;
+            this.hasUsed = true;
+            this.IsWorking = true;
             return new WorkDisposable(this);
         }
     }
