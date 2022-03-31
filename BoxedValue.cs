@@ -6,9 +6,10 @@ namespace Snap.Data.Primitive
     /// increase a slightly performances
     /// </summary>
     [SuppressMessage("Usage", "CA2211:非常量字段应当不可见")]
+    [SuppressMessage("", "SA1401")]
+    [SuppressMessage("", "SA1600")]
     public static class BoxedValue
     {
-
         public static object TrueBox = true;
         public static object FalseBox = false;
 

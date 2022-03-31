@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Snap.Data.Primitive
@@ -8,9 +9,17 @@ namespace Snap.Data.Primitive
     /// </summary>
     public class Observable : INotifyPropertyChanged
     {
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = default!)
+        /// <summary>
+        /// 设置字段的值
+        /// </summary>
+        /// <typeparam name="T">字段类型</typeparam>
+        /// <param name="storage">现有值</param>
+        /// <param name="value">新的值</param>
+        /// <param name="propertyName">属性名称</param>
+        protected void Set<T>([NotNullIfNotNull("value")] ref T storage, T value, [CallerMemberName] string propertyName = default!)
         {
             if (Equals(storage, value))
             {
@@ -18,9 +27,13 @@ namespace Snap.Data.Primitive
             }
 
             storage = value;
-            this.OnPropertyChanged(propertyName);
+            OnPropertyChanged(propertyName);
         }
 
+        /// <summary>
+        /// 触发 <see cref="PropertyChanged"/>
+        /// </summary>
+        /// <param name="propertyName">属性名称</param>
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

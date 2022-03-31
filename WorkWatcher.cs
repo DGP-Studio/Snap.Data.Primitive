@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft;
+using System;
 
 namespace Snap.Data.Primitive
 {
@@ -10,27 +11,58 @@ namespace Snap.Data.Primitive
     public class WorkWatcher : Observable
     {
         private readonly bool isReusable;
-        private bool hasUsed = false;
+        private bool hasUsed;
         private bool isWorking;
         private bool isCompleted;
 
-        public bool IsWorking
+        /// <summary>
+        /// 构造一个新的工作监视器
+        /// </summary>
+        /// <param name="isReusable">是否可以重用</param>
+        public WorkWatcher(bool isReusable = true)
         {
-            get => this.isWorking;
-
-            set => this.Set(ref this.isWorking, value);
+            this.isReusable = isReusable;
         }
 
+        /// <summary>
+        /// 是否正在工作
+        /// </summary>
+        public bool IsWorking
+        {
+            get => isWorking;
+
+            private set => Set(ref isWorking, value);
+        }
+
+        /// <summary>
+        /// 工作是否完成
+        /// </summary>
         public bool IsCompleted
         {
-            get => this.isCompleted;
+            get => isCompleted;
 
-            set => this.Set(ref this.isCompleted, value);
+            private set => Set(ref isCompleted, value);
+        }
+
+        /// <summary>
+        /// 对某个操作进行监视
+        /// </summary>
+        /// <returns>一个可释放的对象，用于在操作完成时自动提示监视器工作已经完成</returns>
+        /// <exception cref="InvalidOperationException">重用了一个不可重用的监视器</exception>
+        public IDisposable Watch()
+        {
+            Verify.Operation(isReusable || !hasUsed, $"此 {nameof(WorkWatcher)} 不允许多次使用");
+
+            hasUsed = true;
+            IsWorking = true;
+
+            return new WorkDisposable(this);
         }
 
         private struct WorkDisposable : IDisposable
         {
             private readonly WorkWatcher work;
+
             public WorkDisposable(WorkWatcher work)
             {
                 this.work = work;
@@ -38,25 +70,9 @@ namespace Snap.Data.Primitive
 
             public void Dispose()
             {
-                this.work.IsWorking = false;
-                this.work.IsCompleted = true;
+                work.IsWorking = false;
+                work.IsCompleted = true;
             }
-        }
-
-        public WorkWatcher(bool isReusable = true)
-        {
-            this.isReusable = isReusable;
-        }
-
-        public IDisposable Watch()
-        {
-            if (!this.isReusable && this.hasUsed)
-            {
-                throw new InvalidOperationException($"此 {nameof(WorkWatcher)} 不允许多次使用");
-            }
-            this.hasUsed = true;
-            this.IsWorking = true;
-            return new WorkDisposable(this);
         }
     }
 }
